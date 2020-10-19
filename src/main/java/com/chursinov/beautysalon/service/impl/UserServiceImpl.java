@@ -4,6 +4,9 @@ import com.chursinov.beautysalon.repository.UserRepository;
 import com.chursinov.beautysalon.service.UserService;
 
 
+import java.util.List;
+
+
 public class UserServiceImpl implements UserService {
 
     private UserRepository repository;
@@ -24,5 +27,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(String name, String email, String password) {
         repository.addUser(name, email, password);
+    }
+
+    @Override
+    public List<User> GetUsersEmailForSendMessage(String date) {
+        return repository.GetUsersEmailForSendMessage(date);
     }
 }

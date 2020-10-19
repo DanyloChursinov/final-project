@@ -1,6 +1,7 @@
 package com.chursinov.beautysalon.repository.impl;
 
 import com.chursinov.beautysalon.constants.Query;
+
 import com.chursinov.beautysalon.entity.Role;
 import com.chursinov.beautysalon.entity.User;
 import com.chursinov.beautysalon.exception.DataAccessException;
@@ -11,6 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class UserRepositoryImpl extends AbstractRepository<User, Integer> implements UserRepository {
@@ -70,6 +73,28 @@ public class UserRepositoryImpl extends AbstractRepository<User, Integer> implem
             connectionSetAutoCommit(connection, true);
             close(resultSet, statement, connection);
         }
+    }
+
+    public List<User> GetUsersEmailForSendMessage (String date){
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.GET_USERS_EMAIL_FOR_SEND_MESSAGE)) {
+            int counter = 1;
+            statement.setString(counter++, date);
+            ResultSet resultSet = statement.executeQuery();
+            return extractUserEmails(resultSet);
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+    private List<User> extractUserEmails (ResultSet resultSet) throws SQLException{
+        List<User> usersEmails = new ArrayList<>();
+        while (resultSet.next()) {
+            User user = new User();
+            user.setEmail(resultSet.getString("email"));
+            usersEmails.add(user);
+        }
+        return usersEmails;
     }
 
     private User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
