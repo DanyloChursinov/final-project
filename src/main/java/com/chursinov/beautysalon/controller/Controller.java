@@ -27,11 +27,5 @@ public class Controller extends HttpServlet {
         ActionResult result = action.execute(request, response);
         Page page = new Page(request,response);
         page.navigate(result);
-        //HttpSession session = request.getSession();
-        //if (session.isNew()) {
-          //  session.setMaxInactiveInterval(60 * 60);
-        //}
-
-        //request.getRequestDispatcher(view).forward(request, response);
     }
 }

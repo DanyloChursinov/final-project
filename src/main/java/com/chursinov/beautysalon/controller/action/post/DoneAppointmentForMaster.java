@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 public class DoneAppointmentForMaster implements Action {
     @Override
     public ActionResult execute(HttpServletRequest request, HttpServletResponse response) {
-       // String status = request.get
 
         AppointmentDoneStatus status = AppointmentDoneStatus.valueOf(request.getParameter("doneStatus").toUpperCase());
         int productId = Integer.parseInt(request.getParameter("appointmentId"));

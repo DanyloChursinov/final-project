@@ -63,14 +63,13 @@ public class UserRepositoryImpl extends AbstractRepository<User, Integer> implem
             statement.setString(counter++, password);
             statement.setInt(counter++, Role.CLIENT.getId());
             statement.executeUpdate();
-            // comit
+            connectionSetAutoCommit(connection, true);
 
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
             connectionRollback(connection);
             throw new DataAccessException(e.getMessage(), e);//TODO our message
         } finally {
-            connectionSetAutoCommit(connection, true);
             close(resultSet, statement, connection);
         }
     }

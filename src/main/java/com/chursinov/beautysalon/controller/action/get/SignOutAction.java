@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SignOutAction implements Action {
     @Override
     public ActionResult execute(HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().removeAttribute("user");
+        request.getSession().invalidate();
         return new ActionResult(Constants.Pages.INDEX_PAGE);
     }
 }
