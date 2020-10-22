@@ -37,7 +37,7 @@
         </div>
         <div class="text-center">
             <input type="text" class="form-control search-margin" placeholder="<fmt:message key="services.search"/>"
-                   name="searchText">
+                   name="searchText" maxlength="20">
             <input type="submit" class="btn btn-outline-dark" value="<fmt:message key="button.searchsort"/>"/>
         </div>
     </form>

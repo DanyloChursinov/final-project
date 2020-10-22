@@ -30,11 +30,11 @@
                     <form action="signin" method="post">
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" name="email" id="email" class="form-control" placeholder="email@example.com" required autofocus>
+                            <input type="email" name="email" id="email" class="form-control" placeholder="email@example.com" required autofocus maxlength="45">
                         </div>
                         <div class="form-group mb-4">
                             <label for="password"><fmt:message key="signup.password"/></label>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="<fmt:message key="signup.inputpassword"/>" required autofocus>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="<fmt:message key="signup.inputpassword"/>" required autofocus maxlength="45">
                         </div>
                         <input name="login" id="login" class="btn btn-block login-btn" type="submit" value="<fmt:message key="signin.button"/>"/>
                     </form>

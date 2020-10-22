@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <input type="text" name="txtName" class="form-control" placeholder="<fmt:message key="review.yourname"/>" value="" required autofocus maxlength="25" />
+                    <input type="text" name="txtName" class="form-control" placeholder="<fmt:message key="review.yourname"/>" value="" required autofocus maxlength="30" />
                 </div>
                 <div class="form-group">
                     <p class="font-italic">
