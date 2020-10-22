@@ -1,7 +1,7 @@
 package com.chursinov.beautysalon.repository.impl;
 
 import com.chursinov.beautysalon.constants.Query;
-import com.chursinov.beautysalon.entity.Product;
+import com.chursinov.beautysalon.entity.product.Product;
 import com.chursinov.beautysalon.exception.DataAccessException;
 import com.chursinov.beautysalon.repository.ProductRepository;
 import org.apache.log4j.Logger;

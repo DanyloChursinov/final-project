@@ -28,6 +28,9 @@ public class ActionFactory {
         actions.put("POST/paid-appointment", new PaidAppointmentForAdmin());
         actions.put("POST/delete-appointment", new DeleteAppointmentForAdmin());
         actions.put("POST/change-time", new ChangeTimeForAdmin());
+        actions.put("GET/change-locale", new ChangeLocaleAction());
+        actions.put("POST/change-working-time", new SetWorkingHoursForAdmin());
+        actions.put("GET/home-page", new HomePageAction());
 
     }
 

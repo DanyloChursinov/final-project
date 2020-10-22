@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Service</title>
+    <title><fmt:message key="navbar.profile"/></title>
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css"/>
     <link href="css/main-style.css" rel="stylesheet" type="text/css">
     <script src="js/bootstrap/bootstrap.min.js"></script>
@@ -10,58 +10,18 @@
 
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="index.jsp">Beauty Salon</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <c:if test="${user != null}">
-                    <li class="nav-item active login-info">
-                        <div class="nav-link">Logged in as ${user.name} (${user.role.value})
-                            <span class="sr-only">(current)</span>
-                        </div>
-                    </li>
-                </c:if>
-                <li class="nav-item active">
-                    <a class="nav-link" href="index.jsp">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="service">Services</a>
-                </li>
-                <c:choose>
-                    <c:when test="${user == null}">
-                        <li class="nav-item">
-                            <a class="nav-link" href="signup.jsp">Sing up</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="signin.jsp">Sing in</a>
-                        </li>
-                    </c:when>
-                    <c:otherwise>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<ct:profile role='${user.role}'/>">Profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="signout">Sing out</a>
-                        </li>
-                    </c:otherwise>
-                </c:choose>
-                <li class="nav-item">
-                    <a class="nav-link" href="review">Reviews</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Russian</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<!-- Navigation -->
+<%@ include file="jspf/navbar.jspf" %>
+
+<div class="text-center text-secondary">
+    <h3><fmt:message key="admin.changetime"/></h3>
+    <form action="change-working-time" method="post">
+        <input type="time" id="time" name="newStartHours" min="00:00" max="23:59" required autofocus>
+        <input type="time" id="time1" name="newEndHours" required autofocus>
+        <span class="validity"></span>
+        <input type="submit" class="btn btn-outline-dark" value="<fmt:message key="button.setworkingtime"/>"/>
+    </form>
+</div>
 
 <c:if test="${error != null}">
     <div class="alert alert-danger error text-center">
@@ -71,58 +31,87 @@
                     ${bookedTime}
             </div>
         </c:forEach>
+        <c:forEach var="endWorkingDay" items="${endWorkingDay}">
+            <div class="text-center">
+                    ${startWorkingDay} - ${endWorkingDay}
+            </div>
+        </c:forEach>
     </div>
 </c:if>
 <div class="container" id="wrap">
-    <h3>Not done appointments</h3>
-    <c:forEach var="notDoneAppointment" items="${notDoneAppointments}">
-        <div class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="text-center text-secondary">
+        <h4><fmt:message key="admin.notdone"/></h4>
+    </div>
+    <c:forEach var="notDoneAppointments" items="${notDoneAppointments}">
+        <div class="list-group-item list-group-item-action list-group-item-warning flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
-                <h3 class="mb-1">${notDoneAppointment.startTime}</h3>
-                <h5 class="mb-1">Master: ${notDoneAppointment.id}</h5>
+                <h5 class="mb-1"><fmt:message key="client.from"/> ${notDoneAppointments.startTime}</h5>
+                <h5 class="mb-1"><fmt:message key="client.to"/> ${notDoneAppointments.endTime}</h5>
             </div>
-            <p class="mb-1">Service duration: ${notDoneAppointment.appointmentDoneStatusForMaster} in minutes</p>
+            <div class="d-flex w-100 justify-content-between">
+                <p class="mb-1"><fmt:message key="services.mastername"/> ${notDoneAppointments.masterName} </p>
+                <p class="mb-1"><fmt:message key="client.service"/> ${notDoneAppointments.productName} </p>
+                <p class="mb-1"><fmt:message key="master.clientname"/> ${notDoneAppointments.clientName} </p>
+            </div>
             <div class="d-flex w-100 justify-content-between mb-3">
-                <small class="mb-1">Master raiting: ${notDoneAppointment.clientName}</small>
-                <small>Price: ${notDoneAppointment.productPrice} UAN</small>
+                <small><fmt:message key="services.price"/> ${notDoneAppointments.productPrice} <fmt:message
+                        key="services.pricevalue"/></small>
             </div>
-            <form action="change-time" method="post">
+            <div class="d-flex w-100 justify-content-between mb-3">
+                <small class="mb-1"><fmt:message
+                        key="client.paidstatus"/> ${notDoneAppointments.appointmentPaidStatusForAdmin.value}</small>
+                <small><fmt:message
+                        key="client.donestatus"/> ${notDoneAppointments.appointmentDoneStatusForMaster.value}</small>
+            </div>
+            <form action="change-time" class="form-inline d-flex w-75 justify-content-between" method="post">
                 <label for="datetime"></label>
-                <input type="hidden" name="masterId" value="${notDoneAppointment.masterId}">
-                <input type="hidden" name="appointmentId" value="${notDoneAppointment.id}">
-                <input type="hidden" name="duration" value="${notDoneAppointment.duration}">
+                <input type="hidden" name="masterId" value="${notDoneAppointments.masterId}">
+                <input type="hidden" name="appointmentId" value="${notDoneAppointments.id}">
+                <input type="hidden" name="duration" value="${notDoneAppointments.duration}">
                 <input type="datetime-local" id="datetime" name="newStartTime" min="${minTimeForPicker}"
                        max="${maxTimeForPicker}" required autofocus>
                 <span class="validity"></span>
-                <input type="submit" class="btn btn-outline-dark" value="Change time"/>
+                <input type="submit" class="btn btn-outline-dark" value="<fmt:message key="button.changetime"/>"/>
             </form>
-            <form action="delete-appointment" method="post">
-                <input type="hidden" name="appointmentDeleteId" value="${notDoneAppointment.id}">
-                <input type="submit" class="btn btn-outline-dark" value="Delete appointment"/>
+            <form action="delete-appointment" class="text-center" method="post">
+                <input type="hidden" name="appointmentDeleteId" value="${notDoneAppointments.id}">
+                <input type="submit" class="btn btn-outline-dark" value="<fmt:message key="button.delete"/>"/>
             </form>
         </div>
     </c:forEach>
-    <h3>Not paid appointments</h3>
-    <c:forEach var="notPaidAppointment" items="${notPaidAppointments}">
-        <div class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="text-center text-secondary">
+        <h4><fmt:message key="admin.notpaidapp"/></h4>
+    </div>
+    <c:forEach var="notPaidAppointments" items="${notPaidAppointments}">
+        <div class="list-group-item list-group-item-action list-group-item-warning flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
-                <h3 class="mb-1">${notPaidAppointment.startTime}</h3>
-                <h5 class="mb-1">Master: ${notPaidAppointment.id}</h5>
+                <h5 class="mb-1"><fmt:message key="client.from"/> ${notPaidAppointments.startTime}</h5>
+                <h5 class="mb-1"><fmt:message key="client.to"/> ${notPaidAppointments.endTime}</h5>
             </div>
-            <p class="mb-1">Service duration: ${notPaidAppointment.appointmentDoneStatusForMaster} in minutes</p>
+            <div class="d-flex w-100 justify-content-between">
+                <p class="mb-1"><fmt:message key="services.mastername"/> ${notPaidAppointments.masterName} </p>
+                <p class="mb-1"><fmt:message key="client.service"/> ${notPaidAppointments.productName} </p>
+                <p class="mb-1"><fmt:message key="master.clientname"/> ${notPaidAppointments.clientName} </p>
+            </div>
             <div class="d-flex w-100 justify-content-between mb-3">
-                <small class="mb-1">Master raiting: ${notPaidAppointment.clientName}</small>
-                <small>Price: ${notPaidAppointment.productPrice} UAN</small>
+                <small><fmt:message key="services.price"/> ${notPaidAppointments.productPrice} <fmt:message
+                        key="services.pricevalue"/></small>
             </div>
-            <form action="paid-appointment" method="post">
+            <div class="d-flex w-100 justify-content-between mb-3">
+                <small class="mb-1"><fmt:message
+                        key="client.paidstatus"/> ${notPaidAppointments.appointmentPaidStatusForAdmin.value}</small>
+                <small><fmt:message
+                        key="client.donestatus"/> ${notPaidAppointments.appointmentDoneStatusForMaster.value}</small>
+            </div>
+            <form action="paid-appointment" class="form-inline d-flex w-100 justify-content-between" method="post">
                 <div class="dropdown">
                     <select class="custom-select" id="inputGroupSelect02" name="paidStatus">
-                        <option value="not_paid">Not paid</option>
-                        <option value="paid">Paid</option>
+                        <option value="not paid"><fmt:message key="admin.notpaid"/></option>
+                        <option value="paid"><fmt:message key="admin.paid"/></option>
                     </select>
                 </div>
-                <input type="hidden" name="appointmentId" value="${notPaidAppointment.id}">
-                <input type="submit" class="btn btn-outline-dark" value="Set status"/>
+                <input type="hidden" name="appointmentId" value="${notPaidAppointments.id}">
+                <input type="submit" class="btn btn-outline-dark" value="<fmt:message key="button.setstatus"/>"/>
             </form>
         </div>
     </c:forEach>

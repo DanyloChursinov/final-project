@@ -1,8 +1,8 @@
 package com.chursinov.beautysalon.service.impl;
 
-import com.chursinov.beautysalon.entity.Appointment;
-import com.chursinov.beautysalon.entity.AppointmentDoneStatus;
-import com.chursinov.beautysalon.entity.AppointmentPaidStatus;
+import com.chursinov.beautysalon.entity.appointment.Appointment;
+import com.chursinov.beautysalon.entity.appointment.AppointmentDoneStatus;
+import com.chursinov.beautysalon.entity.appointment.AppointmentPaidStatus;
 import com.chursinov.beautysalon.repository.AppointmentRepository;
 import com.chursinov.beautysalon.service.AppointmentService;
 
@@ -32,9 +32,20 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public List<String> getWorkingHours() {
+        return repository.getWorkingHours();
+    }
+
+    @Override
     public List<Appointment> getAppointmentsByMasterForAdminUpdate(int masterId, int appointmentId) {
         return repository.getAppointmentsByMasterForAdminUpdate(masterId, appointmentId);
     }
+
+    @Override
+    public void updateWorkingTimeForAdmin(String startTime, String endTime) {
+        repository.updateWorkingTimeForAdmin(startTime, endTime);
+    }
+
 
     @Override
     public void updateAppointmentTimeForAdmin(String startTime, String endTime, int appointmentId) {

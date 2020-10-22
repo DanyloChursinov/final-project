@@ -2,8 +2,8 @@ package com.chursinov.beautysalon.repository.impl;
 
 import com.chursinov.beautysalon.constants.Query;
 
-import com.chursinov.beautysalon.entity.Role;
-import com.chursinov.beautysalon.entity.User;
+import com.chursinov.beautysalon.entity.user.Role;
+import com.chursinov.beautysalon.entity.user.User;
 import com.chursinov.beautysalon.exception.DataAccessException;
 import com.chursinov.beautysalon.repository.UserRepository;
 import org.apache.log4j.Logger;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class UserRepositoryImpl extends AbstractRepository<User, Integer> implements UserRepository {
+public class UserRepositoryImpl extends AbstractRepository implements UserRepository {
     private static final Logger logger = Logger.getLogger(UserRepositoryImpl.class);
 
 
@@ -52,7 +52,6 @@ public class UserRepositoryImpl extends AbstractRepository<User, Integer> implem
     public void addUser(String name, String email, String password) {
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try  {
             connection = getConnection();
             connection.setAutoCommit(false);
@@ -64,13 +63,12 @@ public class UserRepositoryImpl extends AbstractRepository<User, Integer> implem
             statement.setInt(counter++, Role.CLIENT.getId());
             statement.executeUpdate();
             connectionSetAutoCommit(connection, true);
-
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
-            connectionRollback(connection);
-            throw new DataAccessException(e.getMessage(), e);//TODO our message
+            rollback(connection, e);
+            throw new DataAccessException("Cannot add user at date base!", e);
         } finally {
-            close(resultSet, statement, connection);
+            close(connection);
         }
     }
 

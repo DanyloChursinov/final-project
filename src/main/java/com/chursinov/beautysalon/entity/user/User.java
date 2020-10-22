@@ -1,4 +1,4 @@
-package com.chursinov.beautysalon.entity;
+package com.chursinov.beautysalon.entity.user;
 
 import java.util.Objects;
 

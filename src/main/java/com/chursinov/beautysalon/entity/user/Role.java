@@ -1,4 +1,4 @@
-package com.chursinov.beautysalon.entity;
+package com.chursinov.beautysalon.entity.user;
 
 public enum Role {
     ADMIN(1, "admin"), MASTER(2, "master"), CLIENT(3, "client");

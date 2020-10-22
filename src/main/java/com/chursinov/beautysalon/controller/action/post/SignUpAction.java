@@ -4,7 +4,7 @@ import com.chursinov.beautysalon.constants.Constants;
 import com.chursinov.beautysalon.controller.action.Action;
 import com.chursinov.beautysalon.controller.action.ActionResult;
 import com.chursinov.beautysalon.controller.action.ResponseType;
-import com.chursinov.beautysalon.entity.User;
+import com.chursinov.beautysalon.entity.user.User;
 import com.chursinov.beautysalon.exception.DataAccessException;
 import com.chursinov.beautysalon.service.UserService;
 

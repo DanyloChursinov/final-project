@@ -2,7 +2,6 @@ package com.chursinov.beautysalon.repository.impl;
 
 import com.chursinov.beautysalon.constants.Constants;
 import com.chursinov.beautysalon.exception.DataAccessException;
-import com.chursinov.beautysalon.repository.CrudRepository;
 import org.apache.log4j.Logger;
 
 import javax.naming.Context;
@@ -11,9 +10,10 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
 
-public abstract class AbstractRepository<T, E> implements CrudRepository<T, E> {
+public abstract class AbstractRepository<T, E> {
     private static final Logger logger = Logger.getLogger(com.chursinov.beautysalon.repository.impl.AbstractRepository.class);
     private DataSource dataSource;
+
 
     protected AbstractRepository() {
         try {
@@ -39,60 +39,6 @@ public abstract class AbstractRepository<T, E> implements CrudRepository<T, E> {
         return connection;
     }
 
-    @Override
-    public long count(String sql) throws SQLException {
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
-        int counter = 0;
-        if (resultSet.next()) {
-            counter = resultSet.getInt("count");
-            close(resultSet, statement, connection);
-            return counter;
-        } else {
-            close(resultSet, statement, connection);
-            logger.warn("SQL statement { " + sql + " } is not valid");
-        }
-        return counter;
-    }
-
-    @Override
-    public void deleteById(int id, String sql) {
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            int count = 1;
-            preparedStatement.setInt(count++, id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Cannot delete entity by id: " + e);
-            throw new DataAccessException(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public boolean existById(int id, String sql) {
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            int count = 1;
-            preparedStatement.setInt(count++, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            boolean isExist = resultSet.next();
-            resultSet.close();
-            return isExist;
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new DataAccessException(e.getMessage(), e);
-        }
-    }
-
-    protected void connectionRollback(Connection connection) {
-        try {
-            connection.rollback();
-        } catch (SQLException e) {
-            logger.error("Cannot rollback connection: " + e);
-        }
-    }
-
     protected void connectionSetAutoCommit(Connection connection, boolean value) {
         try {
             connection.setAutoCommit(value);
@@ -101,13 +47,46 @@ public abstract class AbstractRepository<T, E> implements CrudRepository<T, E> {
         }
     }
 
-    protected void close(AutoCloseable... autoCloseables) {
-        for (AutoCloseable autoCloseable : autoCloseables) {
-            try {
-                autoCloseable.close();
-            } catch (Exception e) {
-                logger.error("Cannot close Autoclosable:" + e);
+    protected static void close(ResultSet resultSet) {
+        try {
+            resultSet.close();
+        } catch (SQLException e) {
+            logger.error(Constants.Errors.ERR_CANNOT_CLOSE_RESULT_SET);
+            throw new DataAccessException(Constants.Errors.ERR_CANNOT_CLOSE_RESULT_SET);
+        }
+    }
+
+    protected static void close(Connection connection) {
+        try {
+            if (connection != null) {
+                connection.close();
             }
+        } catch (SQLException e) {
+            logger.error(Constants.Errors.ERR_CANNOT_CLOSE_CONNECTION);
+            throw new DataAccessException(Constants.Errors.ERR_CANNOT_CLOSE_CONNECTION);
+        }
+    }
+
+    protected static void close(Statement statement) {
+        try {
+            if (statement != null) {
+                statement.close();
+            }
+        } catch (SQLException e) {
+            logger.error(Constants.Errors.ERR_CANNOT_CLOSE_STATEMENT);
+            throw new DataAccessException(Constants.Errors.ERR_CANNOT_CLOSE_STATEMENT);
+        }
+    }
+
+    protected static void rollback(Connection connection, Throwable t) {
+        try {
+            if (connection != null) {
+                connection.rollback();
+                close(connection);
+            }
+        } catch (SQLException e) {
+            logger.error(Constants.Errors.ERR_CANNOT_ROLLBACK_CONNECTION, t);
+            throw new DataAccessException(Constants.Errors.ERR_CANNOT_ROLLBACK_CONNECTION, t);
         }
     }
 }

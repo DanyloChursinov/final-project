@@ -1,11 +1,11 @@
-package com.chursinov.beautysalon.entity;
+package com.chursinov.beautysalon.entity.appointment;
 
-public enum AppointmentPaidStatus {
-    PAID("paid"), NOT_PAID("not_paid");
+public enum AppointmentDoneStatus {
+    DONE("Done"),IN_PROGRESS("In progress"), NOT_DONE("Not done");
 
     private String value;
 
-    AppointmentPaidStatus(String value) {
+    AppointmentDoneStatus(String value) {
         this.value = value;
     }
 
@@ -16,5 +16,6 @@ public enum AppointmentPaidStatus {
     public void setValue(String value) {
         this.value = value;
     }
+
 
 }

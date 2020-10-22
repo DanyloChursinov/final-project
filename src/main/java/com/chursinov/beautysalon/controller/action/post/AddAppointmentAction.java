@@ -4,9 +4,9 @@ import com.chursinov.beautysalon.constants.Constants;
 import com.chursinov.beautysalon.controller.action.Action;
 import com.chursinov.beautysalon.controller.action.ActionResult;
 import com.chursinov.beautysalon.controller.action.ResponseType;
-import com.chursinov.beautysalon.entity.Appointment;
-import com.chursinov.beautysalon.entity.Product;
-import com.chursinov.beautysalon.entity.User;
+import com.chursinov.beautysalon.entity.appointment.Appointment;
+import com.chursinov.beautysalon.entity.product.Product;
+import com.chursinov.beautysalon.entity.user.User;
 import com.chursinov.beautysalon.service.AppointmentService;
 import com.chursinov.beautysalon.service.ProductService;
 
@@ -23,6 +23,7 @@ public class AddAppointmentAction implements Action {
     public ActionResult execute(HttpServletRequest request, HttpServletResponse response) {
 
         correctValuesForPicker(request);
+
         String startTimeString = request.getParameter("startTime");
         int productId = Integer.parseInt(request.getParameter("productId"));
         int duration = Integer.parseInt(request.getParameter("duration"));
@@ -37,16 +38,24 @@ public class AddAppointmentAction implements Action {
         List<Product> products = serviceProduct.getAllProducts();
         List<Appointment> appointments = serviceAppointment.getAppointmentsForMaster(masterId);
         request.setAttribute("services", products);
+
         String checkMinutes = startTimeString.substring(startTimeString.length()-2);
         if (!(checkMinutes.equals("00") || checkMinutes.equals("30"))) {
             request.setAttribute(Constants.Errors.ERROR, Constants.Errors.SET_MINUTES_IN_CORRECT);
             return new ActionResult(Constants.Pages.SERVICE_PAGE);
         }
 
-
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime startTime = LocalDateTime.parse(startTimeString.replace("T", " "), format);
         LocalDateTime endTime = startTime.plusMinutes(duration);
+
+        List<String> workingHours=serviceAppointment.getWorkingHours();
+        if (!checkWorkingHours(startTime, endTime, workingHours, format)){
+            request.setAttribute("startWorkingDay", workingHours.get(0));
+            request.setAttribute("endWorkingDay", workingHours.get(1));
+            request.setAttribute(Constants.Errors.ERROR, Constants.Errors.DO_NOT_WORKING_AT_THIS_TIME);
+            return new ActionResult(Constants.Pages.SERVICE_PAGE);
+        }
 
         ArrayList <String> bookedTime = getAllBookedTimeSlotsByDate(appointments, startTimeString);
         for (Appointment appointment : appointments) {
@@ -102,5 +111,31 @@ public class AddAppointmentAction implements Action {
             }
         }
         return bookedTime;
+    }
+
+    public static boolean checkWorkingHours(LocalDateTime startTime, LocalDateTime endTime, List<String> workingHours, DateTimeFormatter format){
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        String startWorkingTimeString = workingHours.get(0).substring(0, workingHours.get(0).length()-3);
+        String endWorkingTimeString = workingHours.get(1).substring(0, workingHours.get(1).length()-3);
+        String startWorkingDateTimeString = startTime.format(dateFormat).concat(" ").concat(startWorkingTimeString);
+        String endWorkingDateTimeString = endTime.format(dateFormat).concat(" ").concat(endWorkingTimeString);
+
+        LocalDateTime startWorkingTime = LocalDateTime.parse(startWorkingDateTimeString, format).plusDays(1);
+        LocalDateTime endWorkingTime = LocalDateTime.parse(endWorkingDateTimeString, format);
+        if (startTime.isAfter(endWorkingTime) && startTime.isBefore(startWorkingTime)) {
+            return false;
+        } else if (endTime.isAfter(endWorkingTime) && endTime.isBefore(startWorkingTime)) {
+            return false;
+        }
+        LocalDateTime endWorkingTimeNextDay = endWorkingTime.minusDays(1);
+        LocalDateTime startWorkingTimeNextDay = startWorkingTime.minusDays(1);
+        if (startTime.isAfter(endWorkingTimeNextDay) && startTime.isBefore(startWorkingTimeNextDay)) {
+            return false;
+        } else if (endTime.isAfter(endWorkingTimeNextDay) && endTime.isBefore(startWorkingTimeNextDay)) {
+            return false;
+        }
+        return true;
     }
 }

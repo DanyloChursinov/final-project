@@ -3,7 +3,7 @@ package com.chursinov.beautysalon.controller.action.get;
 import com.chursinov.beautysalon.constants.Constants;
 import com.chursinov.beautysalon.controller.action.Action;
 import com.chursinov.beautysalon.controller.action.ActionResult;
-import com.chursinov.beautysalon.entity.Review;
+import com.chursinov.beautysalon.entity.review.Review;
 import com.chursinov.beautysalon.service.ReviewService;
 
 import javax.servlet.http.HttpServletRequest;

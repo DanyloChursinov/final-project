@@ -26,4 +26,6 @@
         <param-name>log4jConfig</param-name>
         <param-value>/WEB-INF/log4j.properties</param-value>
     </context-param>
+    <response-character-encoding>UTF-8</response-character-encoding>
+    <request-character-encoding>UTF-8</request-character-encoding>
 </web-app>

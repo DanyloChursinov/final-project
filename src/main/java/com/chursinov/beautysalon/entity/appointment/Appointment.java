@@ -1,13 +1,14 @@
-package com.chursinov.beautysalon.entity;
+package com.chursinov.beautysalon.entity.appointment;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class Appointment {
 
     private int id;
     private String startTime;
     private String endTime;
+    private String startWorkingHours;
+    private String endWorkingHours;
     private AppointmentDoneStatus appointmentDoneStatusForMaster;
     private AppointmentPaidStatus appointmentPaidStatusForAdmin;
     private int clientId;
@@ -18,6 +19,22 @@ public class Appointment {
     private int masterId;
     private String masterName;
     private int duration;
+
+    public String getStartWorkingHours() {
+        return startWorkingHours;
+    }
+
+    public void setStartWorkingHours(String startWorkingHours) {
+        this.startWorkingHours = startWorkingHours;
+    }
+
+    public String getEndWorkingHours() {
+        return endWorkingHours;
+    }
+
+    public void setEndWorkingHours(String endWorkingHours) {
+        this.endWorkingHours = endWorkingHours;
+    }
 
     public int getDuration() {
         return duration;

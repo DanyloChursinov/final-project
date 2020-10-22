@@ -1,6 +1,6 @@
 package com.chursinov.beautysalon.util;
 
-import com.chursinov.beautysalon.entity.Product;
+import com.chursinov.beautysalon.entity.product.Product;
 
 import java.util.List;
 

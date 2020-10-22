@@ -1,4 +1,4 @@
-package com.chursinov.beautysalon.entity;
+package com.chursinov.beautysalon.entity.review;
 
 public class Review {
     private int id;

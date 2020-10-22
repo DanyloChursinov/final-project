@@ -4,7 +4,7 @@ import com.chursinov.beautysalon.constants.Constants;
 import com.chursinov.beautysalon.controller.action.Action;
 import com.chursinov.beautysalon.controller.action.ActionResult;
 import com.chursinov.beautysalon.controller.action.ResponseType;
-import com.chursinov.beautysalon.entity.Appointment;
+import com.chursinov.beautysalon.entity.appointment.Appointment;
 import com.chursinov.beautysalon.service.AppointmentService;
 
 import javax.servlet.ServletContext;
@@ -30,6 +30,11 @@ public class ChangeTimeForAdmin implements Action {
         AppointmentService service = (AppointmentService) context.getAttribute("AppointmentService");
         List<Appointment> appointments = service.getAppointmentsByMasterForAdminUpdate(masterId,appointmentId);
 
+        List<Appointment> notDoneAppointments = service.getNotDoneAppointmentsForAdmin();
+        request.setAttribute("notDoneAppointments", notDoneAppointments);
+        List<Appointment> notPaidAppointments = service.getNotPaidAppointmentsForAdmin();
+        request.setAttribute("notPaidAppointments", notPaidAppointments);
+
         String checkMinutes = startTimeString.substring(startTimeString.length()-2);
         if (!(checkMinutes.equals("00") || checkMinutes.equals("30"))) {
             request.setAttribute(Constants.Errors.ERROR, Constants.Errors.SET_MINUTES_IN_CORRECT);
@@ -39,6 +44,14 @@ public class ChangeTimeForAdmin implements Action {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime startTime = LocalDateTime.parse(startTimeString.replace("T", " "), format);
         LocalDateTime endTime = startTime.plusMinutes(duration);
+
+        List<String> workingHours=service.getWorkingHours();
+        if (!AddAppointmentAction.checkWorkingHours(startTime, endTime, workingHours, format)){
+            request.setAttribute("startWorkingDay", workingHours.get(0));
+            request.setAttribute("endWorkingDay", workingHours.get(1));
+            request.setAttribute(Constants.Errors.ERROR, Constants.Errors.DO_NOT_WORKING_AT_THIS_TIME);
+            return new ActionResult(Constants.Pages.ADMIN_PROFILE_PAGE);
+        }
 
         ArrayList <String> bookedTime = AddAppointmentAction.getAllBookedTimeSlotsByDate(appointments, startTimeString);
 

@@ -3,7 +3,7 @@ package com.chursinov.beautysalon.controller.action.get;
 import com.chursinov.beautysalon.constants.Constants;
 import com.chursinov.beautysalon.controller.action.Action;
 import com.chursinov.beautysalon.controller.action.ActionResult;
-import com.chursinov.beautysalon.entity.Product;
+import com.chursinov.beautysalon.entity.product.Product;
 import com.chursinov.beautysalon.service.ProductService;
 import com.chursinov.beautysalon.util.ProductsSorter;
 

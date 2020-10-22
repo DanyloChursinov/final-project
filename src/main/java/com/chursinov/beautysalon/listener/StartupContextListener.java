@@ -2,7 +2,7 @@ package com.chursinov.beautysalon.listener;
 
 import com.chursinov.beautysalon.constants.Constants;
 import com.chursinov.beautysalon.controller.action.ActionFactory;
-import com.chursinov.beautysalon.entity.User;
+import com.chursinov.beautysalon.entity.user.User;
 import com.chursinov.beautysalon.exception.StartupLoadException;
 
 import com.chursinov.beautysalon.repository.impl.AppointmentRepositoryImpl;
@@ -94,7 +94,7 @@ public class StartupContextListener implements ServletContextListener {
                 List<User> users = userRepository.GetUsersEmailForSendMessage(date);
                 for (User user: users) {
                     try {
-                        SendEmail.SendEmail(user);
+                        SendEmail.sendEmail(user);
                     } catch (IOException | MessagingException e) {
                         e.printStackTrace();
                     }
@@ -103,7 +103,7 @@ public class StartupContextListener implements ServletContextListener {
             }
 
         };
-        Date date = Date.from(LocalDateTime.now().plusMinutes(1).toInstant(ZoneOffset.ofHours(3)));
+        Date date = Date.from(LocalDateTime.now().plusHours(5).toInstant(ZoneOffset.ofHours(3)));
         timer.schedule(timerTask, date, TimeUnit.DAYS.toMillis(1));
     }
 }

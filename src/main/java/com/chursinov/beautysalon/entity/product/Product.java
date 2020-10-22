@@ -1,4 +1,4 @@
-package com.chursinov.beautysalon.entity;
+package com.chursinov.beautysalon.entity.product;
 
 import java.math.BigDecimal;
 import java.util.Objects;

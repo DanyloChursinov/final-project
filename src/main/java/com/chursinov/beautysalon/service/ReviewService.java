@@ -1,6 +1,6 @@
 package com.chursinov.beautysalon.service;
 
-import com.chursinov.beautysalon.entity.Review;
+import com.chursinov.beautysalon.entity.review.Review;
 
 import java.util.List;
 

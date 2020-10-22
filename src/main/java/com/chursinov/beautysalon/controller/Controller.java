@@ -18,7 +18,7 @@ import java.io.IOException;
                 "/search-products", "/add-appointment", "/review" , "/add-review",
                 "/client-profile", "/done-appointment", "/master-profile",
                 "/admin-profile", "/paid-appointment", "/delete-appointment",
-                "/change-time"}) //TODO question about img
+                "/change-time", "/change-locale", "/change-working-time", "/home-page"}) //TODO question about img
 public class Controller extends HttpServlet {
 
     @Override

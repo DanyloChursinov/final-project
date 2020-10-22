@@ -4,7 +4,7 @@ import com.chursinov.beautysalon.constants.Constants;
 import com.chursinov.beautysalon.controller.action.Action;
 import com.chursinov.beautysalon.controller.action.ActionResult;
 import com.chursinov.beautysalon.controller.action.post.AddAppointmentAction;
-import com.chursinov.beautysalon.entity.Appointment;
+import com.chursinov.beautysalon.entity.appointment.Appointment;
 import com.chursinov.beautysalon.service.AppointmentService;
 
 import javax.servlet.http.HttpServletRequest;

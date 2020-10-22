@@ -1,9 +1,9 @@
 package com.chursinov.beautysalon.repository.impl;
 
 import com.chursinov.beautysalon.constants.Query;
-import com.chursinov.beautysalon.entity.Appointment;
-import com.chursinov.beautysalon.entity.AppointmentDoneStatus;
-import com.chursinov.beautysalon.entity.AppointmentPaidStatus;
+import com.chursinov.beautysalon.entity.appointment.Appointment;
+import com.chursinov.beautysalon.entity.appointment.AppointmentDoneStatus;
+import com.chursinov.beautysalon.entity.appointment.AppointmentPaidStatus;
 import com.chursinov.beautysalon.exception.DataAccessException;
 import com.chursinov.beautysalon.repository.AppointmentRepository;
 import org.apache.log4j.Logger;
@@ -22,18 +22,20 @@ public class AppointmentRepositoryImpl extends AbstractRepository implements App
 
             String master = resultSet.getString("master");
             String client = resultSet.getString("client");
+
             client = Character.toUpperCase(client.charAt(0)) + client.substring(1);
             master = Character.toUpperCase(master.charAt(0)) + master.substring(1);
 
             String startTimeString = resultSet.getString("start_time");
             String endTimeString = resultSet.getString("end_time");
 
+
             Appointment appointment= new Appointment();
             appointment.setId(resultSet.getInt("appointments.id"));
             appointment.setStartTime(startTimeString.substring(0,startTimeString.length()-5));
             appointment.setEndTime(endTimeString.substring(0,endTimeString.length()-5));
-            appointment.setAppointmentDoneStatusForMaster(AppointmentDoneStatus.valueOf(resultSet.getString("appointment_master_status").toUpperCase()));
-            appointment.setAppointmentPaidStatusForAdmin(AppointmentPaidStatus.valueOf(resultSet.getString("appointment_admin_status").toUpperCase()));
+            appointment.setAppointmentDoneStatusForMaster(AppointmentDoneStatus.valueOf(resultSet.getString("appointment_master_status").toUpperCase().replace(" ", "_")));
+            appointment.setAppointmentPaidStatusForAdmin(AppointmentPaidStatus.valueOf(resultSet.getString("appointment_admin_status").toUpperCase().replace(" ", "_")));
             appointment.setClientId(resultSet.getInt("client_id"));
             appointment.setClientName(client);
             appointment.setProductId(resultSet.getInt("products.id"));
@@ -92,8 +94,8 @@ public class AppointmentRepositoryImpl extends AbstractRepository implements App
             int counter = 1;
             statement.setString(counter++, startTime);
             statement.setString(counter++, endTime);
-            statement.setString(counter++, "not_done");
-            statement.setString(counter++, "not_paid");
+            statement.setString(counter++, "Not done");
+            statement.setString(counter++, "Not paid");
             statement.setInt(counter++, productId);
             statement.setInt(counter++, clientId);
             statement.executeUpdate();
@@ -161,6 +163,7 @@ public class AppointmentRepositoryImpl extends AbstractRepository implements App
         }
     }
 
+
     @Override
     public void updateAppointmentPaidStatus(AppointmentPaidStatus appointmentPaidStatus, int appointmentId) {
         try (Connection connection = getConnection();
@@ -184,6 +187,37 @@ public class AppointmentRepositoryImpl extends AbstractRepository implements App
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<String> getWorkingHours() {
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(Query.GET_WORKING_HOURS);
+            resultSet.next();
+            List<String> workingHours = new ArrayList<>();
+            String startWorkingDay = resultSet.getString("start_working_day");
+            String endWorkingDay = resultSet.getString("end_working_day");
+            workingHours.add(startWorkingDay);
+            workingHours.add(endWorkingDay);
+            return workingHours;
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+    @Override
+    public void updateWorkingTimeForAdmin(String startTime, String endTime) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.SET_WORKING_HOURS)) {
+            int counter = 1;
+            statement.setString(counter++, startTime);
+            statement.setString(counter++, endTime);
+            statement.executeUpdate();
+        }catch (SQLException e){
+            logger.error(e.getMessage());
             throw new DataAccessException(e.getMessage(), e);
         }
     }

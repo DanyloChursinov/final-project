@@ -1,5 +1,5 @@
 package com.chursinov.beautysalon.service.impl;
-import com.chursinov.beautysalon.entity.User;
+import com.chursinov.beautysalon.entity.user.User;
 import com.chursinov.beautysalon.repository.UserRepository;
 import com.chursinov.beautysalon.service.UserService;
 

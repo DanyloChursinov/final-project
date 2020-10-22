@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="home-page"><fmt:message key="navbar.logo"/></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <c:if test="${user != null}">
+                    <li class="nav-item active login-info">
+                        <div class="nav-link"><fmt:message key="navbar.loggedas"/> ${user.name} (${user.role.value})
+                            <span class="sr-only">(current)</span>
+                        </div>
+                    </li>
+                </c:if>
+                <li class="nav-item active">
+                    <a class="nav-link" href="home-page"><fmt:message key="navbar.home"/>
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="service"><fmt:message key="navbar.service"/></a>
+                </li>
+                <c:choose>
+                    <c:when test="${user == null}">
+                        <li class="nav-item">
+                            <a class="nav-link" href="signup.jsp"><fmt:message key="navbar.signup"/></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="signin.jsp"><fmt:message key="navbar.signin"/></a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<ct:profile role='${user.role}'/>"><fmt:message key="navbar.profile"/></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="signout"><fmt:message key="navbar.signout"/></a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
+                <li class="nav-item">
+                    <a class="nav-link" href="review"><fmt:message key="navbar.review"/></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="change-locale"><fmt:message key="navbar.locale"/></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

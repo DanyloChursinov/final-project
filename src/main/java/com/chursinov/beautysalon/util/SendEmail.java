@@ -1,6 +1,6 @@
 package com.chursinov.beautysalon.util;
 
-import com.chursinov.beautysalon.entity.User;
+import com.chursinov.beautysalon.entity.user.User;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class SendEmail {
-    public static void SendEmail(User user) throws IOException, MessagingException {
+    public static void sendEmail(User user) throws IOException, MessagingException {
         Properties properties = new Properties();
         properties.load(SendEmail.class.getClassLoader().getResourceAsStream("mail.properties"));
 

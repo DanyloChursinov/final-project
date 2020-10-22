@@ -1,6 +1,6 @@
 package com.chursinov.beautysalon.service.impl;
 
-import com.chursinov.beautysalon.entity.Review;
+import com.chursinov.beautysalon.entity.review.Review;
 import com.chursinov.beautysalon.repository.ReviewRepository;
 import com.chursinov.beautysalon.service.ReviewService;
 

@@ -1,6 +1,6 @@
 package com.chursinov.beautysalon.tag;
 
-import com.chursinov.beautysalon.entity.Role;
+import com.chursinov.beautysalon.entity.user.Role;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;

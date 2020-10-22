@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Service</title>
+    <title><fmt:message key="navbar.review"/></title>
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/main-style.css" rel="stylesheet" type="text/css">
     <link href="css/reviewform.css" rel="stylesheet" type="text/css">
@@ -12,69 +12,20 @@
 
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="index.jsp">Beauty Salon</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <c:if test="${user != null}">
-                    <li class="nav-item active login-info">
-                        <div class="nav-link">Logged in as ${user.name} (${user.role.value})
-                            <span class="sr-only">(current)</span>
-                        </div>
-                    </li>
-                </c:if>
-                <li class="nav-item active">
-                    <a class="nav-link" href="index.jsp">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="service">Services</a>
-                </li>
-                <c:choose>
-                    <c:when test="${user == null}">
-                        <li class="nav-item">
-                            <a class="nav-link" href="signup.jsp">Sing up</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="signin.jsp">Sing in</a>
-                        </li>
-                    </c:when>
-                    <c:otherwise>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<ct:profile role='${user.role}'/>">Profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="signout">Sing out</a>
-                        </li>
-                    </c:otherwise>
-                </c:choose>
-                <li class="nav-item">
-                    <a class="nav-link" href="review">Reviews</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Russian</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<!-- Navigation -->
+<%@ include file="jspf/navbar.jspf" %>
+
 <div class="container contact-form">
     <form method="post" action="add-review">
-        <h3>Please leave a review</h3>
+        <h3><fmt:message key="review.please"/></h3>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <input type="text" name="txtName" class="form-control" placeholder="Your Name *" value="" required autofocus />
+                    <input type="text" name="txtName" class="form-control" placeholder="<fmt:message key="review.yourname"/>" value="" required autofocus maxlength="25" />
                 </div>
                 <div class="form-group">
                     <p class="font-italic">
-                        Select evaluation
+                        <fmt:message key="review.selectevaluation"/>
                     </p>
                     <div class="dropdown">
                         <select class="custom-select" id="inputGroupSelect02" name="evaluation">
@@ -88,7 +39,7 @@
                 </div>
                 <div class="form-group">
                     <p class="font-italic">
-                        Select master name
+                        <fmt:message key="review.selectname"/>
                     </p>
                     <div class="dropdown">
                         <select class="custom-select" id="inputGroupSelect01" name="masters">
@@ -99,12 +50,12 @@
                     </div>
                 </div>
                 <div class="form-group text-center">
-                    <input type="submit" name="btnSubmit" class="btnContact" value="Send Message" />
+                    <input type="submit" name="btnSubmit" class="btnContact" value="<fmt:message key="button.send"/>" />
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <textarea name="txtMsg" class="form-control" placeholder="Your Message *" style="width: 100%; height: 150px;" required autofocus></textarea>
+                    <textarea name="txtMsg" class="form-control" placeholder="<fmt:message key="review.yourtext"/>" style="width: 100%; height: 150px;" required autofocus maxlength="700"></textarea>
                 </div>
                 <c:if test="${error != null}">
                     <div class="alert alert-danger error">
@@ -119,17 +70,17 @@
 <div class="container" id="wrap">
 <div class="list-group" id="list-group">
     <c:forEach var="reviews" items="${reviews}">
-        <div class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="list-group-item list-group-item-action list-group-item-warning flex-column align-items-start">
             <div class="d-flex justify-content-around">
-            <h5 class="mb-1 font-italic">User name: ${reviews.user}</h5>
-            <h5 class="mb-1 font-italic">Master name: ${reviews.master}</h5>
+            <h5 class="mb-1 font-italic"><fmt:message key="reviev.username"/> ${reviews.user}</h5>
+            <h5 class="mb-1 font-italic"><fmt:message key="review.mastername"/> ${reviews.master}</h5>
             </div>
             <div class="d-flex justify-content-center">
-                <h6 class="mb-1 font-italic">Evaluation: ${reviews.evaluation}</h6>
+                <h6 class="mb-1 font-italic"><fmt:message key="review.evaluation"/> ${reviews.evaluation}</h6>
             </div>
             <div class="mx-auto" style="width: 600px;">
             <p class="font-italic">
-                 Review: ${reviews.message}
+                 ${reviews.message}
             </p>
             </div>
         </div>
